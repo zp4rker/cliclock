@@ -1,8 +1,8 @@
 SRC = clock.c
 CC = cc
-BIN = cli-clock
-INSTALLPATH = /usr/local/bin/
-CFLAGS = -Wall -std=c99
+BIN = cliclock
+INSTALLPATH = /usr/bin/
+CFLAGS = -Wall
 LDFLAGS = -lcurses
 
 
@@ -24,6 +24,7 @@ uninstall :
 	@echo "uninstalling binary file (${INSTALLPATH}${BIN})"
 	@rm -f ${INSTALLPATH}${BIN}
 	@echo "${BIN} uninstalled"
+
 clean :
 
 	@echo "cleaning ${BIN}"
