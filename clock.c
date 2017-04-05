@@ -27,6 +27,7 @@ typedef struct {
         int color;
         long delay;
         bool twenty_four_hour;
+        bool use_seconds;
     } option;
     struct {
         int x, y, w, h;
@@ -104,10 +105,16 @@ static void init(void)
         cliclock->geo.y = 0;
 
     // 24 hour time format
-    if(cliclock->option.twenty_four_hour)
+    if (!cliclock->option.use_seconds 
+            && cliclock->option.twenty_four_hour) {
+        cliclock->geo.w = 34;
+    } else if (cliclock->option.twenty_four_hour) {
         cliclock->geo.w = 54;
-    else
+    } else if (!cliclock->option.use_seconds) {
+        cliclock->geo.w = 54;
+    } else {
         cliclock->geo.w = 74;
+    }
 
     cliclock->geo.h = 7;
     cliclock->tm = localtime(&(cliclock->lt));
@@ -172,9 +179,13 @@ static void update_hour(void)
     /* Set minutes */
     cliclock->date.minute[0] = cliclock->tm->tm_min / 10;
     cliclock->date.minute[1] = cliclock->tm->tm_min % 10;
+
     /* Set seconds */
-    cliclock->date.second[0] = cliclock->tm->tm_sec / 10;
-    cliclock->date.second[1] = cliclock->tm->tm_sec % 10;
+    if (cliclock->option.use_seconds) {
+        cliclock->date.second[0] = cliclock->tm->tm_sec / 10;
+        cliclock->date.second[1] = cliclock->tm->tm_sec % 10;
+    }
+
     return;
 }
 
@@ -204,6 +215,18 @@ static void draw_clock(void)
        Y  -- Column
     */
 
+    // Calculate where the AM and PM should be drawn.
+    int am_pm_start = 0;
+    if (!cliclock->option.twenty_four_hour
+            && cliclock->option.use_seconds) {
+        am_pm_start = 58;
+    } else if (!cliclock->option.twenty_four_hour
+            && !cliclock->option.use_seconds) {
+        am_pm_start = 39;
+    }
+
+        
+
     /* Draw hour numbers */
     draw_number(cliclock->date.hour[0], 1, 1);
     draw_number(cliclock->date.hour[1], 1, 8);
@@ -215,41 +238,47 @@ static void draw_clock(void)
     draw_number(cliclock->date.minute[0], 1, 20);
     draw_number(cliclock->date.minute[1], 1, 27);
     /* 2 dot for number separation */
-    wbkgdset(cliclock->framewin, COLOR_PAIR(1));
-    mvwaddstr(cliclock->framewin, 2, 35, "  ");
-    mvwaddstr(cliclock->framewin, 4, 35, "  ");
-    /* Draw second numbers */
-    draw_number(cliclock->date.second[0], 1, 39);
-    draw_number(cliclock->date.second[1], 1, 46);
-    /* Draw AM or PM */
-    if (!cliclock->option.twenty_four_hour) 
-    {
+
+    // Check if the seconds should be drawn
+    if (cliclock->option.use_seconds) {
         wbkgdset(cliclock->framewin, COLOR_PAIR(1));
-        mvwaddstr(cliclock->framewin, 1, 58, "      ");
-        mvwaddstr(cliclock->framewin, 2, 58, "  ");
-        mvwaddstr(cliclock->framewin, 2, 62, "  ");
-        mvwaddstr(cliclock->framewin, 3, 58, "      ");
-        mvwaddstr(cliclock->framewin, 4, 58, "  ");
-        mvwaddstr(cliclock->framewin, 5, 58, "  ");
+        mvwaddstr(cliclock->framewin, 2, 35, "  ");
+        mvwaddstr(cliclock->framewin, 4, 35, "  ");
+
+        // Draw seconds
+        draw_number(cliclock->date.second[0], 1, 39);
+        draw_number(cliclock->date.second[1], 1, 46);
+    }
+
+    // Draw AM or PM
+    if (!cliclock->option.twenty_four_hour) {
+        wbkgdset(cliclock->framewin, COLOR_PAIR(1));
+        mvwaddstr(cliclock->framewin, 1, am_pm_start, "      ");
+        mvwaddstr(cliclock->framewin, 2, am_pm_start, "  ");
+        mvwaddstr(cliclock->framewin, 2, am_pm_start + 4, "  ");
+        mvwaddstr(cliclock->framewin, 3, am_pm_start, "      ");
+        mvwaddstr(cliclock->framewin, 4, am_pm_start, "  ");
+        mvwaddstr(cliclock->framewin, 5, am_pm_start, "  ");
         if(cliclock->tm->tm_hour < 12)
          /*if(true)*/
-        {   mvwaddstr(cliclock->framewin, 4, 62, "  ");
-            mvwaddstr(cliclock->framewin, 5, 62, "  ");
+        {   mvwaddstr(cliclock->framewin, 4, am_pm_start + 4, "  ");
+            mvwaddstr(cliclock->framewin, 5, am_pm_start + 4, "  ");
         }
             
-        mvwaddstr(cliclock->framewin, 1, 65, "        ");
-        mvwaddstr(cliclock->framewin, 2, 65, "  ");
-        mvwaddstr(cliclock->framewin, 3, 65, "  ");
-        mvwaddstr(cliclock->framewin, 4, 65, "  ");
-        mvwaddstr(cliclock->framewin, 5, 65, "  ");
-        mvwaddstr(cliclock->framewin, 2, 68, "  ");
-        mvwaddstr(cliclock->framewin, 3, 68, "  ");
-        mvwaddstr(cliclock->framewin, 4, 68, "  ");
-        mvwaddstr(cliclock->framewin, 5, 68, "  ");
-        mvwaddstr(cliclock->framewin, 2, 71, "  ");
-        mvwaddstr(cliclock->framewin, 3, 71, "  ");
-        mvwaddstr(cliclock->framewin, 4, 71, "  ");
-        mvwaddstr(cliclock->framewin, 5, 71, "  ");
+        // Draw the M
+        mvwaddstr(cliclock->framewin, 1, am_pm_start + 7, "        ");
+        mvwaddstr(cliclock->framewin, 2, am_pm_start + 7, "  ");
+        mvwaddstr(cliclock->framewin, 3, am_pm_start + 7, "  ");
+        mvwaddstr(cliclock->framewin, 4, am_pm_start + 7, "  ");
+        mvwaddstr(cliclock->framewin, 5, am_pm_start + 7, "  ");
+        mvwaddstr(cliclock->framewin, 2, am_pm_start + 10, "  ");
+        mvwaddstr(cliclock->framewin, 3, am_pm_start + 10, "  ");
+        mvwaddstr(cliclock->framewin, 4, am_pm_start + 10, "  ");
+        mvwaddstr(cliclock->framewin, 5, am_pm_start + 10, "  ");
+        mvwaddstr(cliclock->framewin, 2, am_pm_start + 13, "  ");
+        mvwaddstr(cliclock->framewin, 3, am_pm_start + 13, "  ");
+        mvwaddstr(cliclock->framewin, 4, am_pm_start + 13, "  ");
+        mvwaddstr(cliclock->framewin, 5, am_pm_start + 13, "  ");
     }
 }
 
@@ -284,16 +313,17 @@ int main(int argc, char **argv)
     int c;
     int option_index = 0;
     bool twenty_four_hour = false;
+    bool use_seconds = true;
 
     static struct option long_options[] =
     {
         {"help", no_argument, 0, 'h'},
         {"ttime", no_argument, 0, 't'},
-        {"color", required_argument, 0, 'c'}
+        {"color", required_argument, 0, 'c'},
+        {"noseconds", no_argument, 0, 's'}
     };
 
-    while ((c = getopt_long (argc, argv, "hc:t", long_options, &option_index)) != -1)
-    {
+    while ((c = getopt_long (argc, argv, "hc:ts", long_options, &option_index)) != -1) {
         switch (c)
         {
             case 'c':
@@ -310,6 +340,10 @@ int main(int argc, char **argv)
                 // Allow twenty four hour time format.
                 twenty_four_hour = true;
                 break;
+            case 's':
+                // Do not show the seconds.
+                use_seconds = false;
+                break;
             case 'h':
                 usage();
                 return 0;
@@ -321,6 +355,7 @@ int main(int argc, char **argv)
     cliclock = malloc(sizeof(cliclock_t));
     cliclock->option.color = color;
     cliclock->option.twenty_four_hour = twenty_four_hour;
+    cliclock->option.use_seconds = use_seconds;
     cliclock->option.delay = 40000000;
     init();
     while (cliclock->running) {
@@ -336,5 +371,6 @@ void usage(void)
 {
     printf(" Usage: cliclock [-c color] [-t]\n");
     printf("    -c [color]: Use this color for clock (default: %s)\n", DEFAULT_FG_COLOR_NAME);
-    printf("    -t: Use this to specify 24 Hour time.\n");
+    printf("    -t: Display 24 Hour time format.\n");
+    printf("    -s: Do not show the seconds field.\n");
 }
