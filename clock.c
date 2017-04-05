@@ -1,6 +1,16 @@
 /*
  * Thanks to xorg62 for tty-clock
  *      and genie5 for 12clock
+ *
+ * A simple CLI clock that displays the time in 24 or 12 hour format.
+ *
+ * Modified by: clyde80
+ * Website for this version: https://github.com/clyde80/cliclock
+ * Date Created: 2017-04-04
+ * Date Modified: 2017-04-05
+ *
+ * Any bugs? Please report them to https://github.com/clyde80/cliclock/issues
+ * Want to contribute? Fork the repo at https://github.com/clyde80/cliclock
  */
 #include <stdlib.h>
 #include <time.h>
@@ -157,12 +167,10 @@ static void update_hour(void)
     cliclock->lt = time(NULL);
     ihour = cliclock->tm->tm_hour;
 
-    /* 
-       Set hour 
-        
-       Check if the user specified 24 hour time format.
-     */
-    if (cliclock->option.twenty_four_hour && (ihour % 12) == 0 && ihour > 12) {
+    // Set the hour. Check if the hour is "24" or "12" or we specified 24hr time.
+    if (cliclock->option.twenty_four_hour 
+            && ((ihour % 12) == 0)
+            && (ihour > 12)) {
         cliclock->date.hour[0] = 0;
         cliclock->date.hour[1] = 0;
     } else if (cliclock->option.twenty_four_hour) {
@@ -176,11 +184,11 @@ static void update_hour(void)
         cliclock->date.hour[1] = (ihour % 12) % 10;
     }
 
-    /* Set minutes */
+    // Set minutes
     cliclock->date.minute[0] = cliclock->tm->tm_min / 10;
     cliclock->date.minute[1] = cliclock->tm->tm_min % 10;
 
-    /* Set seconds */
+    // SEt seconds
     if (cliclock->option.use_seconds) {
         cliclock->date.second[0] = cliclock->tm->tm_sec / 10;
         cliclock->date.second[1] = cliclock->tm->tm_sec % 10;
@@ -225,7 +233,6 @@ static void draw_clock(void)
         am_pm_start = 39;
     }
 
-        
 
     /* Draw hour numbers */
     draw_number(cliclock->date.hour[0], 1, 1);
