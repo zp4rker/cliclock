@@ -1,6 +1,6 @@
 # Cli clock
 
-A CLI clock that displays the time in 24 or 12 hour time format (with seconds).
+A CLI clock that displays the time in 24 or 12 hour format.
 
 ## Installation
 
@@ -9,13 +9,15 @@ A CLI clock that displays the time in 24 or 12 hour time format (with seconds).
     make
     sudo make install
 
-This will install the program to `/usr/bin/cliclock`
+This will install the program to `/usr/bin/cliclock`.
 
 ## Usage
 
 -c or --color [value] -- Set the color to [value] ([0-7]).
 
 -t or --ttime -- Use 24 hour time format.
+
+-s or --noseconds -- Disable the seconds field.
 
 #### Examples
 
@@ -24,6 +26,8 @@ This will install the program to `/usr/bin/cliclock`
 `cliclock -c 1 -t` -- Use the color Red and display the time in 24 hour format (only changes foreground).
 
 `cliclock -t` -- Display the time in 24 hour format.
+
+`cliclock -s` -- Disable the seconds field.
 
 `cliclock -h` -- Display the help message.
 

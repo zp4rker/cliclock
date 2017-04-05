@@ -1,5 +1,7 @@
 Changes on 2017-04-05:
 - Add option to remove the seconds field for 12 and 24 hour time formats.
+- Update README.md
+    - Add "-s" ("--noseconds") option.
 
 Changes on 2017-04-04:
 
