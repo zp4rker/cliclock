@@ -14,6 +14,7 @@ This will install the program to `/usr/bin/cliclock`
 ## Usage
 
 -c or --color [value] -- Set the color to [value] ([0-7]).
+
 -t or --ttime -- Use 24 hour time format.
 
 #### Examples
@@ -26,7 +27,7 @@ This will install the program to `/usr/bin/cliclock`
 
 `cliclock -h` -- Display the help message.
 
-- Type 'q' to exit.
+Type 'q' to exit.
 
 ## Screenshots
 
