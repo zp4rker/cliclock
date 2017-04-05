@@ -1,0 +1,8 @@
+Changes on 2017-04-04:
+
+- Add option to specify 24 hour or 12 hour (default) time format ("-t").
+- Specify color with "-c".
+- Update Makefile
+    - Update install path and some flags.
+- Update README.md
+    - Add install instructions, usage, examples, and screenshots.
