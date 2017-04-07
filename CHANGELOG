@@ -1,3 +1,9 @@
+Changes on 2017-04-06:
+- Added feature: Can now press 'c' to change color while the clock is running.
+- Added feature: Can now press 's' to toggle the seconds field.
+- Added feature: Can now press 't' to toggle 12/24 hour time format.
+- Update README.md (include new features).
+
 Changes on 2017-04-05:
 - Add option to remove the seconds field for 12 and 24 hour time formats.
 - Update README.md

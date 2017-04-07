@@ -62,8 +62,15 @@ static void draw_clock(void);
 static void clock_move(int x, int y);
 static void signal_handler(int signal);
 static void usage(void);
+static void change_color(void);
+static void key_event(void);
+static void toggle_seconds(void);
+static void toggle_twenty_four_hour(void);
 
 cliclock_t *cliclock;
+
+// Current color
+int c_color = 0;
 
 static const bool number[][15] = {
     {1,1,1,1,0,1,1,0,1,1,0,1,1,1,1}, /* 0 */
@@ -155,6 +162,7 @@ static void signal_handler(int signal)
             break;
         case SIGTERM:
             cliclock->running = false; /* interruption signal */
+            break;
     }
     return;
 }
@@ -188,7 +196,7 @@ static void update_hour(void)
     cliclock->date.minute[0] = cliclock->tm->tm_min / 10;
     cliclock->date.minute[1] = cliclock->tm->tm_min % 10;
 
-    // SEt seconds
+    // Set seconds
     if (cliclock->option.use_seconds) {
         cliclock->date.second[0] = cliclock->tm->tm_sec / 10;
         cliclock->date.second[1] = cliclock->tm->tm_sec % 10;
@@ -218,10 +226,7 @@ static void draw_number(int n, int x, int y)
 
 static void draw_clock(void)
 {
-    /*
-       X  -- Row
-       Y  -- Column
-    */
+    // These functions take coordinates in (y,x) order. Not (x,y). 
 
     // Calculate where the AM and PM should be drawn.
     int am_pm_start = 0;
@@ -237,6 +242,7 @@ static void draw_clock(void)
     /* Draw hour numbers */
     draw_number(cliclock->date.hour[0], 1, 1);
     draw_number(cliclock->date.hour[1], 1, 8);
+
     /* 2 dot for number separation */
     wbkgdset(cliclock->framewin, COLOR_PAIR(1));
     mvwaddstr(cliclock->framewin, 2, 16, "  ");
@@ -296,6 +302,43 @@ static void clock_move(int x, int y)
     return;
 }
 
+static void change_color(void) {
+    cliclock->running = false;
+    c_color = (c_color < 7) ? c_color+1 : 0;
+    cliclock->option.color = c_color;
+    init();
+    while (cliclock->running) {
+        update_hour();
+        draw_clock();
+        key_event();
+    }
+}
+
+
+static void toggle_seconds(void) {
+    cliclock->running = false;
+    cliclock->option.use_seconds = !cliclock->option.use_seconds;
+    init();
+    while (cliclock->running) {
+        update_hour();
+        draw_clock();
+        key_event();
+    }
+}
+
+
+static void toggle_twenty_four_hour() {
+    cliclock->running = false;
+    cliclock->option.twenty_four_hour = !cliclock->option.twenty_four_hour;
+    init();
+    while (cliclock->running) {
+        update_hour();
+        draw_clock();
+        key_event();
+    }
+    endwin();
+}
+
 
 static void key_event(void)
 {
@@ -304,6 +347,15 @@ static void key_event(void)
     switch (c = wgetch(stdscr)) {
         case 'q':
             cliclock->running = false;
+            break;
+        case 'c':
+            change_color();
+            break;
+        case 's':
+            toggle_seconds();
+            break;
+        case 't':
+            toggle_twenty_four_hour();
             break;
         default:
             nanosleep(&length, NULL);
@@ -335,6 +387,7 @@ int main(int argc, char **argv)
         {
             case 'c':
                 color = atoi(optarg);
+                c_color = atoi(optarg);
                 if (color < 0 || color > 7)
                 {
                     printf("Invalid color number: %d\n\n", color);
@@ -374,10 +427,13 @@ int main(int argc, char **argv)
     endwin();
     return 0;
 }
+
+
 void usage(void)
 {
     printf(" Usage: cliclock [-c color] [-t]\n");
     printf("    -c [color]: Use this color for clock (default: %s)\n", DEFAULT_FG_COLOR_NAME);
+    printf("                Or start the clock and press 'c' to change color.\n");
     printf("    -t: Display 24 Hour time format.\n");
     printf("    -s: Do not show the seconds field.\n");
 }

@@ -13,6 +13,16 @@ This will install the program to `/usr/bin/cliclock`.
 
 ## Usage
 
+You can do these while running cliclock.
+
+Press "c" to change colors.
+
+Press "s" to toggle the seconds field.
+
+Press "t" to toggle 12/24 hour time format.
+
+Or you can provide the following command line options.
+
 -c or --color [value] -- Set the color to [value] ([0-7]).
 
 -t or --ttime -- Use 24 hour time format.
