@@ -1,3 +1,7 @@
+Changes on 2017-04-09:
+- Update usage message to include information about which keys can be pressed.
+- Reformat and simplify some code.
+
 Changes on 2017-04-06:
 - Added feature: Can now press 'c' to change color while the clock is running.
 - Added feature: Can now press 's' to toggle the seconds field.
@@ -6,14 +10,14 @@ Changes on 2017-04-06:
 
 Changes on 2017-04-05:
 - Add option to remove the seconds field for 12 and 24 hour time formats.
-- Update README.md
+- Update README.md.
     - Add "-s" ("--noseconds") option.
 
 Changes on 2017-04-04:
 
 - Add option to specify 24 hour or 12 hour (default) time format ("-t").
 - Specify color with "-c".
-- Update Makefile
+- Update Makefile.
     - Update install path and some flags.
-- Update README.md
+- Update README.md.
     - Add install instructions, usage, examples, and screenshots.
