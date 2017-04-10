@@ -7,7 +7,7 @@
  * Modified by: clyde80
  * Website for this version: https://github.com/clyde80/cliclock
  * Date Created: 2017-04-04
- * Date Modified: 2017-04-09
+ * Date Modified: 2017-04-10
  *
  * Any bugs? Please report them to https://github.com/clyde80/cliclock/issues
  * Want to contribute? Fork the repo at https://github.com/clyde80/cliclock
@@ -116,7 +116,6 @@ static void init(void)
     sigaction(SIGWINCH, &sig, NULL);
     sigaction(SIGTERM,  &sig, NULL);
 
-    /* Init global struct */ 
     cliclock->running = true;
 
     if (!cliclock->geo.x) cliclock->geo.x = 0;
@@ -161,8 +160,8 @@ static void signal_handler(int signal)
             endwin();
             init();
             break;
-        case SIGTERM:
-            cliclock->running = false; // Interruption signal.
+        case SIGTERM: // Interruption Signal.
+            cliclock->running = false;
             break;
     }
 
@@ -400,9 +399,8 @@ void usage(void)
 
 int main(int argc, char **argv)
 {
-     // Parses options
-    int color = DEFAULT_FG_COLOR;   // The color.
     int c;                          // The option the user typed.
+    int color = DEFAULT_FG_COLOR;   // The color.
     int option_index = 0;
     bool twenty_four_hour = false;  // Use twenty-four hour format.
     bool use_seconds = true;        // Display the seconds field.
@@ -415,7 +413,8 @@ int main(int argc, char **argv)
         {"noseconds", no_argument, 0, 's'}
     };
 
-    while ((c = getopt_long (argc, argv, "hc:ts", long_options, &option_index)) != -1) {
+    // Parse command line options.
+    while ((c = getopt_long(argc, argv, "hc:ts", long_options, &option_index)) != -1) {
         switch (c) {
             case 'c':
                 color = atoi(optarg);   // Convert the int (0-7) to a string.
