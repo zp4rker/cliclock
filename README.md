@@ -2,7 +2,7 @@
 
 A CLI clock that displays the time in 24 or 12 hour format.
 
-![Demo](http://i.imgur.com/pCrdAci.gifv)
+![Demo](http://i.imgur.com/pCrdAci.gif)
 
 ## Installation
 
