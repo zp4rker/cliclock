@@ -2,6 +2,8 @@
 
 A CLI clock that displays the time in 24 or 12 hour format.
 
+![Demo](http://i.imgur.com/pCrdAci.gifv)
+
 ## Installation
 
     git clone https://github.com/clyde80/cliclock
