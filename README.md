@@ -45,17 +45,4 @@ Or you can provide the following command line options.
 
 Type 'q' to exit.
 
-## Screenshots
-
-*Note: Colors will vary depending on your terminal configuration.*
-
-#### Default 
-![Screenshot](http://i.imgur.com/C5l3ota.png)
-
-#### Colors
-![Screenshot](http://i.imgur.com/qUGzoc4.png)
-
-#### 24-Hour and Colors
-![Screenshot](http://i.imgur.com/TD5VrFK.png)
-
 Fork of the tty-clock by xorg62.
