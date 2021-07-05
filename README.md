@@ -46,3 +46,6 @@ Or you can provide the following command line options.
 Type 'q' to exit.
 
 Fork of the tty-clock by xorg62.
+
+## Changes from `clyde80`'s fork
+- Made the "1" a bit more uniform as you can see in this screenshot: ![new-one](https://cdn.zp4rker.com/Screen_Shot_2021-07-05_at_10.45.11.png)
