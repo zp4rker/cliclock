@@ -4,13 +4,13 @@
  *
  * A simple CLI clock that displays the time in 24 or 12 hour format.
  *
- * Modified by: clyde80
- * Website for this version: https://github.com/clyde80/cliclock
+ * Modified by: clyde80 and zp4rker
+ * Website for this version: https://github.com/zp4rker/cliclock
  * Date Created: 2017-04-04
- * Date Modified: 2017-04-10
+ * Date Modified: 2021-07-05
  *
- * Any bugs? Please report them to https://github.com/clyde80/cliclock/issues
- * Want to contribute? Fork the repo at https://github.com/clyde80/cliclock
+ * Any bugs? Please report them to https://github.com/zp4rker/cliclock/issues
+ * Want to contribute? Fork the repo at https://github.com/zp4rker/cliclock
  */
 #include <stdlib.h>
 #include <time.h>
